@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using LeaveManagementSystem.web.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LeaveManagementSystem.web.Data;
 using LeaveManagementSystem.web.Models.LeaveTypes;
 using LeaveManagementSystem.web.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LeaveManagementSystem.web.Controllers
 {
+    [Authorize(Roles = Roles.Administrator)]
     public class LeaveTypesController(ILeaveTypesService leaveTypesService) : Controller
     {
         private readonly ILeaveTypesService _leaveTypesService = leaveTypesService;
