@@ -1,0 +1,23 @@
+﻿using System.ComponentModel.DataAnnotations;
+using LeaveManagementSystem.web.Models.LeaveTypes;
+using LeaveManagementSystem.web.Models.Period;
+
+namespace LeaveManagementSystem.web.Models.LeaveAllocations;
+
+public class LeaveAllocationVM
+{
+    public int Id { get; set; }
+
+    [Display(Name = "Number Of Days")]
+    public int Days { get; set; }
+
+    [Display(Name = "Allocation Period")] 
+    public PeriodVM Period { get; set; } = new PeriodVM();
+
+    public LeaveTypeReadOnlyVM LeaveType { get; set; } = new LeaveTypeReadOnlyVM();
+}
+
+public class LeaveAllocationEditVM : LeaveAllocationVM
+{
+    public EmployeeListVM? Employee { get; set; }
+}

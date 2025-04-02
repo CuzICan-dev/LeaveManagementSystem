@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
-using LeaveManagementSystem.web.Data;
 using LeaveManagementSystem.web.Models.LeaveTypes;
 using Microsoft.EntityFrameworkCore;
 
-namespace LeaveManagementSystem.web.Services;
+namespace LeaveManagementSystem.web.Services.LeaveTypes;
 
 public class LeaveTypesService(ApplicationDbContext context, IMapper mapper) : ILeaveTypesService
 {
@@ -40,19 +39,17 @@ public class LeaveTypesService(ApplicationDbContext context, IMapper mapper) : I
     
     public async Task EditAsync(LeaveTypeEditVM leaveTypeEdit)
     {
-        var leaveType = _mapper.Map<LeaveType>(leaveTypeEdit);
+        var leaveType = _mapper.Map<Data.LeaveType>(leaveTypeEdit);
         _context.Update(leaveType);
         await _context.SaveChangesAsync();
     }
     
     public async Task CreateAsync(LeaveTypeCreateVM leaveTypeCreate)
     {
-        var leaveType = _mapper.Map<LeaveType>(leaveTypeCreate);
+        var leaveType = _mapper.Map<Data.LeaveType>(leaveTypeCreate);
         _context.Add(leaveType);
         await _context.SaveChangesAsync();
     }
-    
-    
     
     public bool LeaveTypeExists(int id)
     {
@@ -67,5 +64,11 @@ public class LeaveTypesService(ApplicationDbContext context, IMapper mapper) : I
     public async Task<bool> CheckIfLeaveTypeNameExists(LeaveTypeEditVM leaveTypeEdit)
     {
         return await _context.LeaveTypes.AnyAsync(e => e.Name.ToLower().Equals(leaveTypeEdit.Name.ToLower()) && e.Id != leaveTypeEdit.Id);
+    }
+    
+    public async Task<bool> DaysExceedMaximum(int leaveTypeId, int Days)
+    {
+        var leaveType = await _context.LeaveTypes.FindAsync(leaveTypeId);
+        return leaveType.NumberOfDays < Days;
     }
 }
